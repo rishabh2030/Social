@@ -18,7 +18,9 @@ type config struct {
 
 func (app *application) mount() *chi.Mux {
 	r := chi.NewRouter()
+	// middleware
 	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
 	r.Route("/v1", func(r chi.Router) {
 		r.Get("/health", app.healthCheckHandler)
 	})
