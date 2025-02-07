@@ -18,9 +18,15 @@ type config struct {
 
 func (app *application) mount() *chi.Mux {
 	r := chi.NewRouter()
+
 	// middleware
+	r.Use(middleware.RequestID)
+	r.Use(middleware.RealIP)
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
+	r.Use(middleware.Timeout(60 * time.Second))
+
+	// routes
 	r.Route("/v1", func(r chi.Router) {
 		r.Get("/health", app.healthCheckHandler)
 	})
